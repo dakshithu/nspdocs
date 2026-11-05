@@ -57,7 +57,7 @@ function allocateShlokas(names) {
     let avarthiCount = 1;
     let currentIndex = 0;
     let firstTenNames = names.slice(0, 10); // Store the first 10 names
-    let remainingNames = names.slice(10); // Names excluding the first 
+    let remainingNames = names.length > 10 ? names.slice(10) : names.slice(); // Names excluding the first 
 	 console.log('\n total number of names :', names.length, '\n', names,'\n');
 
     while (currentIndex < names.length) {
@@ -84,22 +84,12 @@ function allocateShlokas(names) {
         let shlokaAllocation = selectedNames.slice(2);
 
         // Ensure we allocate 38 shlokas by adding extra names if needed (excluding the first 10 names)
-let unusedNames = names.filter(name => !selectedNames.includes(name));
-   console.log('\n unused names:\n', unusedNames);
-
-while (shlokaAllocation.length < mahaMantras) {
-    if (unusedNames.length > 0) {
-        // Take from unused names first
-		      let notfirsttenNames = unusedNames.filter(name => !firstTenNames.includes(name));
-		      console.log('\n notfirsttenNames names:\n', notfirsttenNames,'shlokaAllocation',shlokaAllocation.length);
-			  shlokaAllocation.push(...notfirsttenNames.sort(() => 0.5 - Math.random()).slice(0, mahaMantras - shlokaAllocation.length));
-              
-    } else {
-        // If all names are used, start picking again (excluding the first 10 names)
-        let extraNames = remainingNames.sort(() => 0.5 - Math.random()).slice(0, mahaMantras - shlokaAllocation.length);
-        shlokaAllocation.push(...extraNames);
-    }
-}
+        const unusedNames = remainingNames.filter(name => !selectedNames.includes(name));
+        const backupPool = unusedNames.length ? unusedNames : remainingNames;
+        while (shlokaAllocation.length < mahaMantras) {
+            const shuffled = backupPool.slice().sort(() => 0.5 - Math.random());
+            shlokaAllocation.push(...shuffled.slice(0, mahaMantras - shlokaAllocation.length));
+        }
         let remainingShlokas = mahaMantras;
         let remainingParticipants = shlokaAllocation.length;
 		 let shlokasPerPerson = 0;
