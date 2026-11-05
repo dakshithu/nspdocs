@@ -1,0 +1,68 @@
+:root {
+  --paper: #f7f2e7;
+  --ink: #302c25;
+  --red: #923b29;
+  --line: #c9bdab;
+  --display: Georgia, serif;
+  color: var(--ink);
+  background: var(--paper);
+  font: 16px/1.55 "Trebuchet MS", sans-serif;
+}
+* { box-sizing: border-box }
+body { margin: auto; max-width: 1440px; padding: 0 clamp(18px,6vw,88px) }
+a { color: inherit; text-underline-offset: .22em }
+a:hover,summary:hover { color: var(--red) }
+:focus-visible { outline: 3px solid var(--red); outline-offset: 4px }
+a,button,summary { touch-action: manipulation }
+.skip { position: absolute; top: -8em; background: var(--paper); padding: 8px; z-index: 2 }
+.skip:focus { top: 0 }
+header { display: flex; align-items: center; gap: 32px; padding: 20px 0; border-bottom: 1px solid var(--ink) }
+header a,.art,.entry,.action { text-decoration: none }
+.brand { font: bold 26px var(--display); letter-spacing: .03em; margin-right: auto }
+.brand span { color: var(--red) }
+nav { display: flex; gap: clamp(12px,2vw,32px) }
+.languages { position: relative; border-left: 1px solid var(--line); padding-left: 20px }
+summary { cursor: pointer }
+.languages div { position: absolute; right: 0; z-index: 1; padding: 8px 20px; background: var(--paper); border: 1px solid var(--line) }
+.languages a { display: block; padding: 6px }
+.cover,.reader { display: grid; grid-template-columns: 1.2fr .8fr; gap: clamp(24px,6vw,96px); align-items: center; padding: clamp(40px,5vw,80px) 0 }
+h1,h2,.entry { font-family: var(--display); font-weight: normal; text-wrap: balance }
+h1 { font-size: clamp(40px,5vw,74px); line-height: 1.08; margin: 0 0 24px }
+.cover h1 { font-size: clamp(48px,7.3vw,106px); letter-spacing: -.065em; line-height: .99 }
+em { color: var(--red) }
+p { max-width: 65ch; text-wrap: pretty }
+.cover p { max-width: 34ch; font-size: 19px }
+.action,button { display: inline-block; background: var(--red); color: white; padding: 12px 20px; border: 0; margin: 8px 4px 4px 0; font: inherit; cursor: pointer }
+.action:hover,button:hover { background: #723020; color: white }
+.action:active,button:active { transform: translateY(1px) }
+.art { display: block; background: var(--red); color: var(--paper); padding: 22px; border: 4px double var(--paper) }
+.art:hover { color: white }
+figure { margin: 0; text-align: center }
+.art figure { padding: 16px; border: 1px solid #e4be98 }
+figure img { display: block; max-width: 100%; width: auto; height: auto; max-height: 420px; margin: auto }
+.art img { height: clamp(205px,22vw,320px); width: auto }
+.art span { display: block; padding-top: 12px; font: italic 16px var(--display); text-align: center }
+section { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; border-top: 1px solid var(--ink); padding: 36px 0 48px }
+h2 { font-size: clamp(27px,3vw,42px); line-height: 1.12; margin: 0 }
+.entry { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: clamp(22px,2.3vw,34px) }
+.entry:first-child { padding-top: 0 }
+.entry b { color: var(--red); font: 18px sans-serif }
+section p { margin: 0 }
+article { padding: 40px 0 }
+.reader { align-items: start }
+footer { border-top: 3px double var(--ink); padding: 32px 0 48px; overflow-wrap: anywhere }
+footer h2 { margin-bottom: 20px }
+footer p a { margin-right: 14px }
+.tools .container-fluid>.row,.tools .container>.row { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 24px }
+.tools label,.tools small { display: block; margin: 10px 0 4px }
+input,textarea { width: 100%; font: inherit; padding: 8px; background: #fffcf5; border: 1px solid var(--line); color: var(--ink) }
+textarea { resize: vertical }
+.tools button { font-size: 14px; padding: 8px 12px }
+@media(max-width:767px) {
+ header { flex-wrap: wrap; gap: 12px; padding: 14px 0 }
+ nav { order: 1; width: 100%; flex-wrap: wrap }
+ .cover,.reader,section,.tools .container>.row,.tools .container-fluid>.row { grid-template-columns: minmax(0,1fr) }
+ .cover { gap: 24px }
+ .art { max-width: 420px; width: 100% }
+ section { gap: 24px }
+}
