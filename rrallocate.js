@@ -47,6 +47,24 @@ function allocateShlokas(names) {
     let satsangDate = window.localStorage.getItem("nsp-satsangdate");
     outputText += `Batch Number: ${batchNumber}  [Satsang Date: ${satsangDate}]\n--------------------------------------------\n\n`;
 	
+    let avarthiCount = 1;
+    let currentIndex = 0;
+    const reserveNSP = names[0].toUpperCase() === 'NSP';
+    const participants = reserveNSP
+        ? names.filter(name => name.toUpperCase() !== 'NSP')
+        : names;
+    if (!participants.length) {
+        document.getElementById('allocation').value = '';
+        window.localStorage.removeItem('csvData');
+        alert('Add at least one participant after NSP to receive the remaining portions.');
+        return;
+    }
+    const backupNames = names.length > 10 ? names.slice(10) : names;
+    const remainingNames = reserveNSP
+        ? backupNames.filter(name => name.toUpperCase() !== 'NSP')
+        : backupNames;
+    if (!remainingNames.length) remainingNames.push(...participants);
+    names = participants;
 	   // Select a random starting prayer person from available names
     let startingPrayerPerson = names[Math.floor(Math.random() * names.length)];
     outputText += `\Starting Prayer: ${startingPrayerPerson}\n`;
@@ -54,11 +72,7 @@ function allocateShlokas(names) {
 
     console.log(outputText);
 
-    let avarthiCount = 1;
-    let currentIndex = 0;
-    let firstTenNames = names.slice(0, 10); // Store the first 10 names
-    let remainingNames = names.slice(10); // Names excluding the first 
-	 console.log('\n total number of names :', names.length, '\n', names,'\n');
+
 
     while (currentIndex < names.length) {
         outputText += `\nAvarthi-${avarthiCount}\n`;
@@ -82,24 +96,16 @@ function allocateShlokas(names) {
 
         let startShloka = 1;
         let shlokaAllocation = selectedNames.slice(2);
+        const reservedPortions = reserveNSP && avarthiCount === 1 ? 1 : 0;
+        if (reservedPortions) shlokaAllocation.unshift('NSP');
 
         // Ensure we allocate 38 shlokas by adding extra names if needed (excluding the first 10 names)
-let unusedNames = names.filter(name => !selectedNames.includes(name));
-   console.log('\n unused names:\n', unusedNames);
-
-while (shlokaAllocation.length < mahaMantras) {
-    if (unusedNames.length > 0) {
-        // Take from unused names first
-		      let notfirsttenNames = unusedNames.filter(name => !firstTenNames.includes(name));
-		      console.log('\n notfirsttenNames names:\n', notfirsttenNames,'shlokaAllocation',shlokaAllocation.length);
-			  shlokaAllocation.push(...notfirsttenNames.sort(() => 0.5 - Math.random()).slice(0, mahaMantras - shlokaAllocation.length));
-              
-    } else {
-        // If all names are used, start picking again (excluding the first 10 names)
-        let extraNames = remainingNames.sort(() => 0.5 - Math.random()).slice(0, mahaMantras - shlokaAllocation.length);
-        shlokaAllocation.push(...extraNames);
-    }
-}
+        const unusedNames = remainingNames.filter(name => !selectedNames.includes(name));
+        const backupPool = unusedNames.length ? unusedNames : remainingNames;
+        while (shlokaAllocation.length < mahaMantras) {
+            const shuffled = backupPool.slice().sort(() => 0.5 - Math.random());
+            shlokaAllocation.push(...shuffled.slice(0, mahaMantras - shlokaAllocation.length));
+        }
         let remainingShlokas = mahaMantras;
         let remainingParticipants = shlokaAllocation.length;
 		 let shlokasPerPerson = 0;
@@ -133,7 +139,7 @@ while (shlokaAllocation.length < mahaMantras) {
             }
         }
 
-        currentIndex += actualParticipantsofAvarthi + 2;
+        currentIndex += actualParticipantsofAvarthi + 2 - reservedPortions;
 		actualParticipantsofAvarthi = 0;
         avarthiCount++;
 			 console.log('currentIndex:',currentIndex,' avarthiCount:', avarthiCount, ' startShloka:', startShloka, 'names total:', names.length);
